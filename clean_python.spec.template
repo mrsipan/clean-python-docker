@@ -1,0 +1,51 @@
+%define python_version PYTHON_VERSION
+
+Version: %{python_version}
+Summary: Python %{python_version} from straightforward source build
+Name: clean_python
+Release: 1
+License: Python
+Group: Development/Languages
+Source0: Python-%{version}.tgz
+AutoReqProv: no
+
+requires: zlib
+requires: bzip2
+requires: glibc
+requires: gdbm
+requires: ncurses
+requires: readline
+requires: openssl
+requires: libstdc++
+requires: libgcc
+requires: gmp
+
+BuildRequires: zlib-devel
+BuildRequires: bzip2-devel
+BuildRequires: gdbm-devel
+BuildRequires: ncurses-devel
+BuildRequires: readline-devel
+BuildRequires: openssl-devel
+BuildRequires: libffi-devel
+
+BuildRoot: /tmp/%{name}
+
+%description
+A clean python
+
+%prep
+%setup -n Python-%{version}
+
+%build
+rm -rf %{buildroot}
+./configure --enable-ipv6 --enable-unicode=ucs2 --enable-shared \
+  --prefix=/opt/%{name}/%{version}
+
+make LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/%{name}/%{version}/lib"
+make install DESTDIR=$RPM_BUILD_ROOT
+
+find %{buildroot}/opt/%{name}/%{version}/lib -name '*.py[oc]'\
+  -exec rm {} \;
+
+%files
+%attr(-, root, root) /opt/%{name}/%{version}
