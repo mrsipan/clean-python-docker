@@ -21,7 +21,14 @@ gzip -c Python-$version.tar > Python-${version}.tgz
 
 rpmbuild -ts --nodeps --define "_sourcedir `pwd`" --define "_srcrpmdir `pwd`" Python-${version}.tgz
 
-yum-builddep -y clean_python*.src.rpm
+case "$(rpm -q centos-release)" in
+  centos-release-7*)
+    yum-builddep -y clean_python*.src.rpm
+    ;;
+  centos-release-8*)
+    dnf-builddep -y clean_python*.src.rpm
+    ;;
+esac
 
 rpmbuild --rebuild --define "_rpmdir `pwd`/rpms" clean_python*.rpm
 
