@@ -6,7 +6,7 @@ Name: clean_python
 Release: 1
 License: Python
 Group: Development/Languages
-Source0: Python-%{version}.tgz
+Source0: https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 AutoReqProv: no
 
 requires: zlib
