@@ -1,10 +1,14 @@
 #!/bin/bash -vex
 
+set -o verbose
+set -o errexit
+set -o xtrace
+
 version=$1
 
 sed "s/PYTHON_VERSION/$version/" clean_python.spec.template > clean_python.spec
 
-curl -O "https://www.python.org/ftp/python/${version}/Python-${version}.tgz"
+curl -k -O "https://www.python.org/ftp/python/${version}/Python-${version}.tgz"
 
 spec_path="$(tar -t -f Python-${version}.tgz | grep -e '\.spec$' || true)"
 
@@ -19,16 +23,13 @@ tar -u -f Python-$version.tar clean_python.spec
 
 gzip -c Python-$version.tar > Python-${version}.tgz
 
-rpmbuild -ts --nodeps --define "_sourcedir `pwd`" --define "_srcrpmdir `pwd`" Python-${version}.tgz
+rpmbuild -ts --nodeps --define "_sourcedir `pwd`" --define "_srcrpmdir `pwd`/rpms" Python-${version}.tgz
 
-case "$(rpm -q centos-release)" in
-  centos-release-7*)
-    yum-builddep -y clean_python*.src.rpm
-    ;;
-  centos-release-8*)
-    dnf-builddep -y clean_python*.src.rpm
-    ;;
-esac
+for src_rpm_file in `ls -1 rpms/clean_python*.src.rpm`; do
+  yum-builddep -y $src_rpm_file
+done
 
-rpmbuild --rebuild --define "_rpmdir `pwd`/rpms" clean_python*.rpm
+for src_rpm_file in `ls -1 rpms/clean_python*.src.rpm`; do
+  rpmbuild --rebuild --define "_rpmdir `pwd`/rpms" $src_rpm_file
+done
 

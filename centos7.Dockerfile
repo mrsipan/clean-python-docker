@@ -10,6 +10,6 @@ COPY clean_python.spec.template /build
 WORKDIR /build
 
 ENTRYPOINT ["/build/build.sh"]
-CMD ["3.7.6"]
+CMD ["3.7.9"]
 
 

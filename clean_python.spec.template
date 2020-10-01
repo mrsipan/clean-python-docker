@@ -45,8 +45,26 @@ rm -rf %{buildroot}
 make LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/%{name}/%{version}/lib"
 make install DESTDIR=$RPM_BUILD_ROOT
 
-find %{buildroot}/opt/%{name}/%{version}/lib -name '*.py[oc]'\
-  -exec rm {} \;
+find %{buildroot}/opt/%{name}/%{version}/lib -name '*.py[oc]' -exec rm {} \;
+
+mkdir -p %{buildroot}/etc/ld.so.conf.d
+cat << EOF | tee %{buildroot}/etc/ld.so.conf.d/%{name}.conf
+/opt/%{name}/%{version}/lib
+EOF
+
+%post
+alternatives \
+  --install /usr/bin/python3 python3 /opt/%{name}/%{version}/bin/python3 1 \
+  --slave /usr/bin/pip3 pip3 /opt/%{name}/%{version}/bin/pip3
+
+ldconfig -v
+
+%postun
+alternatives \
+  --remove python3 /opt/%{name}/%{version}/bin/python3
+
+ldconfig -v
 
 %files
 %attr(-, root, root) /opt/%{name}/%{version}
+%attr(-, root, root) /etc/ld.so.conf.d/%{name}.conf
