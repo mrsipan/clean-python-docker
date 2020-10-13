@@ -9,25 +9,27 @@ Group: Development/Languages
 Source0: https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 AutoReqProv: no
 
-requires: zlib
 requires: bzip2
-requires: glibc
 requires: gdbm
-requires: ncurses
-requires: readline
-requires: openssl
-requires: libstdc++
-requires: libgcc
+requires: glibc
 requires: gmp
+requires: libgcc
+requires: libstdc++
+requires: ncurses
+requires: openssl
+requires: readline
+requires: xz-libs
+requires: zlib
 
-BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
 BuildRequires: gdbm-devel
-BuildRequires: ncurses-devel
-BuildRequires: readline-devel
-BuildRequires: openssl-devel
 BuildRequires: libffi-devel
+BuildRequires: ncurses-devel
+BuildRequires: openssl-devel
+BuildRequires: readline-devel
 BuildRequires: sqlite-devel
+BuildRequires: xz-devel
+BuildRequires: zlib-devel
 
 BuildRoot: /tmp/%{name}
 
