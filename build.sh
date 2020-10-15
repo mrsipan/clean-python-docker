@@ -33,3 +33,5 @@ for src_rpm_file in `ls -1 rpms/clean_python*.src.rpm`; do
   rpmbuild --rebuild --define "_rpmdir `pwd`/rpms" $src_rpm_file
 done
 
+cp clean_python.spec "`pwd`/rpms"
+
