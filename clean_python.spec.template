@@ -2,7 +2,7 @@
 
 Version: %{python_version}
 Summary: Python %{python_version} from straightforward source build
-Name: clean_python
+Name: clean_pythonPYVER
 Release: 1
 License: Python
 Group: Development/Languages
