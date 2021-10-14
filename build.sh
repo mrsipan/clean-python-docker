@@ -11,7 +11,7 @@ dnf="dnf"
 if [ $(cat /etc/centos-release |  awk '{gsub("[^[:digit:]]+", " "); print $1}') = '7' ]; then
   dnf="yum"
 fi
-${dnf} -y install gcc make rpm-build
+${dnf} -y install gcc make rpm-build ${dnf}-utils
 ${dnf} clean all
 test ! -d /build/rpms && mkdir -p /build/rpms
 

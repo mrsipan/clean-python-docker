@@ -3,7 +3,7 @@
 Version: %{python_version}
 Summary: Python %{python_version} from straightforward source build
 Name: clean_pythonPYVER
-Release: 1
+Release: 1%{dist}
 License: Python
 Group: Development/Languages
 Source0: https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz

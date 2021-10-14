@@ -1,6 +1,13 @@
 # Build a python rpm in docker
 
+To build a python rpm for _centos 7_:
+
+```bash
+docker run -w /build -v $PWD:/build --rm -it centos:7 /build/build.sh 3.10.0
 ```
-docker build -t builder -f centos7.Dockerfile .
-docker run -v `pwd`:/build/rpms -it builder 3.7.5
+
+To build a python rpm for _centos 8_:
+
+```bash
+docker run -w /build -v $PWD:/build --rm -it centos:8 /build/build.sh 3.10.0
 ```
