@@ -47,7 +47,7 @@ for src_rpm_file in `ls -1 rpms/clean_python*.src.rpm`; do
   fi
 done
 
-for src_rpm_file in `ls -1 rpms/clean_python*.src.rpm`; do
+for src_rpm_file in `ls -1 rpms/clean_python${ver}-${version}*.src.rpm`; do
   rpmbuild --rebuild --define "_rpmdir `pwd`/rpms" $src_rpm_file
 done
 

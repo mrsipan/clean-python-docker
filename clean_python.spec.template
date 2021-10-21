@@ -15,6 +15,7 @@ requires: glibc
 requires: gmp
 requires: libgcc
 requires: libstdc++
+requires: libuuid
 requires: ncurses
 requires: openssl
 requires: readline
@@ -24,6 +25,7 @@ requires: zlib
 BuildRequires: bzip2-devel
 BuildRequires: gdbm-devel
 BuildRequires: libffi-devel
+BuildRequires: libuuid-devel
 BuildRequires: ncurses-devel
 BuildRequires: openssl-devel
 BuildRequires: readline-devel
@@ -41,32 +43,34 @@ A clean python
 
 %build
 rm -rf %{buildroot}
-./configure --enable-ipv6 --enable-unicode=ucs2 --enable-shared \
-  --prefix=/opt/%{name}/%{version}
+./configure --enable-optimizations \
+            --with-ensurepip=upgrade \
+	    --enable-ipv6 --enable-shared \
+            --prefix=/opt/%{name}
 
-make LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/%{name}/%{version}/lib"
+make LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/%{name}/lib"
 make install DESTDIR=$RPM_BUILD_ROOT
 
-find %{buildroot}/opt/%{name}/%{version}/lib -name '*.py[oc]' -exec rm {} \;
+find %{buildroot}/opt/%{name}/lib -name '*.py[oc]' -exec rm {} \;
 
 mkdir -p %{buildroot}/etc/ld.so.conf.d
 cat << EOF | tee %{buildroot}/etc/ld.so.conf.d/%{name}.conf
-/opt/%{name}/%{version}/lib
+/opt/%{name}/lib
 EOF
 
 %post
 alternatives \
-  --install /usr/bin/python3 python3 /opt/%{name}/%{version}/bin/python3 1 \
-  --slave /usr/bin/pip3 pip3 /opt/%{name}/%{version}/bin/pip3
+  --install /usr/bin/python3 python3 /opt/%{name}/bin/python3 1 \
+  --slave /usr/bin/pip3 pip3 /opt/%{name}/bin/pip3
 
 ldconfig -v
 
 %postun
 alternatives \
-  --remove python3 /opt/%{name}/%{version}/bin/python3
+  --remove python3 /opt/%{name}/bin/python3
 
 ldconfig -v
 
 %files
-%attr(-, root, root) /opt/%{name}/%{version}
+%attr(-, root, root) /opt/%{name}
 %attr(-, root, root) /etc/ld.so.conf.d/%{name}.conf
